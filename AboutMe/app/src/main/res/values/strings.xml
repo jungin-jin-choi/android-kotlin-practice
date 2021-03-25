@@ -17,4 +17,6 @@ There is no solution code provided for this challenge, but the skeleton code bel
 
 SKELETON code of view hierarchy:
     </string>
+    <string name="what_is_your_nickname">What is your nickname?</string>
+    <string name="done">Done</string>
 </resources>
