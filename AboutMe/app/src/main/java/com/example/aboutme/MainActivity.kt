@@ -12,28 +12,27 @@ import androidx.databinding.DataBindingUtil
 import com.example.aboutme.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    // Late initialization for binding object(non-nullable)
+    private lateinit var binding : ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        // Should also create the binding object to connect the activity and layout
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-
-        // it refers to the view passed by argument, in this case done_button
-        findViewById<Button>(R.id.done_button).setOnClickListener{
+        // Replace findViewById with data binding
+        binding.doneButton.setOnClickListener{
             addNickname(it)
         }
     }
 
     private fun addNickname(view: View) {
-        // view refers to button which called this method
-        val editText = findViewById<EditText>(R.id.nickname_edit)
-        val nicknameTextView = findViewById<TextView>(R.id.nickname_text)
-
         // set nickname text
-        nicknameTextView.text = editText.text
+        binding.nicknameText.text = binding.nicknameEdit.text
         // hide EditText and Button, show TextView
-        editText.visibility = View.GONE
-        view.visibility = View.GONE
-        nicknameTextView.visibility = View.VISIBLE
+        binding.nicknameEdit.visibility = View.GONE
+        binding.doneButton.visibility = View.GONE
+        binding.nicknameText.visibility = View.VISIBLE
 
         // hide keyboards
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
