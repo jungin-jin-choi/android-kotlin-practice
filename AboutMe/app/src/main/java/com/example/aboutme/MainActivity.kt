@@ -27,12 +27,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addNickname(view: View) {
-        // set nickname text
-        binding.nicknameText.text = binding.nicknameEdit.text
-        // hide EditText and Button, show TextView
-        binding.nicknameEdit.visibility = View.GONE
-        binding.doneButton.visibility = View.GONE
-        binding.nicknameText.visibility = View.VISIBLE
+        // improve readability by using kotlin scope function
+        binding.apply{
+            nicknameText.text = nicknameEdit.text
+            // invalidate all binding expressions in order to refresh the UI with new data
+            invalidateAll()
+            nicknameEdit.visibility = View.GONE
+            doneButton.visibility = View.GONE
+            nicknameText.visibility = View.VISIBLE
+        }
 
         // hide keyboards
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
