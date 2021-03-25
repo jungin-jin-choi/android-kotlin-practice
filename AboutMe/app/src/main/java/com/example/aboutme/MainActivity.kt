@@ -14,11 +14,15 @@ import com.example.aboutme.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
     // Late initialization for binding object(non-nullable)
     private lateinit var binding : ActivityMainBinding
+    // create instance of Data class
+    private val myName = MyName("JungIn Choi")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Should also create the binding object to connect the activity and layout
+        // Should also create the binding object to connect the main activity view and layout
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        // Should connect the data class instance to the layout
+        binding.myName = myName
 
         // Replace findViewById with data binding
         binding.doneButton.setOnClickListener{
@@ -29,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     private fun addNickname(view: View) {
         // improve readability by using kotlin scope function
         binding.apply{
-            nicknameText.text = nicknameEdit.text
+            myName?.nickname = nicknameEdit.text.toString()
             // invalidate all binding expressions in order to refresh the UI with new data
             invalidateAll()
             nicknameEdit.visibility = View.GONE
