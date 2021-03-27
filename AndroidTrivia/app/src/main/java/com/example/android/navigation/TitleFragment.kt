@@ -37,7 +37,10 @@ class TitleFragment : Fragment() {
         // Inflate the layout for this fragment
         val binding = DataBindingUtil.inflate<FragmentTitleBinding>(inflater, R.layout.fragment_title, container, false)
         //The complete onClickListener with Navigation using createNavigateOnClickListener
-        binding.playButton.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_titleFragment_to_gameFragment))
+        binding.playButton.setOnClickListener{view: View ->
+            // Navigation.createNavigateOnClickListener(R.id.action_titleFragment_to_gameFragment)
+            view.findNavController().navigate(TitleFragmentDirections.actionTitleFragmentToGameFragment())
+        }
 
         // Tell Android that our fragment has an Options menu
         setHasOptionsMenu(true)
@@ -63,7 +66,7 @@ class TitleFragment : Fragment() {
      * */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return NavigationUI.onNavDestinationSelected(item!!,
-                view!!.findNavController())
+                requireView().findNavController())
                 // allows your app to directly handle the menu item without navigating
                 || super.onOptionsItemSelected(item)
     }
