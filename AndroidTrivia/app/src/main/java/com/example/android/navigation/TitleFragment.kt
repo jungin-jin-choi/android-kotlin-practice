@@ -1,13 +1,12 @@
 package com.example.android.navigation
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI
 import com.example.android.navigation.databinding.FragmentTitleBinding
 
 // TODO: Rename parameter arguments, choose names that match
@@ -39,7 +38,34 @@ class TitleFragment : Fragment() {
         val binding = DataBindingUtil.inflate<FragmentTitleBinding>(inflater, R.layout.fragment_title, container, false)
         //The complete onClickListener with Navigation using createNavigateOnClickListener
         binding.playButton.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_titleFragment_to_gameFragment))
+
+        // Tell Android that our fragment has an Options menu
+        setHasOptionsMenu(true)
+
         return binding.root
+    }
+
+    /**
+     *  onCreateOptionsMenu() to create Options Menu
+     *  Inflate menu resource using the provided menu inflater and menu structure.
+     * */
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater?.inflate(R.menu.overflow_menu, menu)
+    }
+
+    /**
+     * onOptionsItemSelected() is executed when MenuItem is clicked
+     *
+     * Navigate to About frame
+     * Return true if NavigationUI.onNavDestinationSelected returns true
+     * Else, return super.onOptionsItemSelected (Allows app to directly handle the menu item without navigating)
+     * */
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return NavigationUI.onNavDestinationSelected(item!!,
+                view!!.findNavController())
+                // allows your app to directly handle the menu item without navigating
+                || super.onOptionsItemSelected(item)
     }
 
     companion object {
