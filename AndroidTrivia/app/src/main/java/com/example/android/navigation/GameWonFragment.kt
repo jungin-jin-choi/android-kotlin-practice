@@ -20,6 +20,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.core.app.ShareCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
@@ -45,20 +46,29 @@ class GameWonFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
 //        inflate menu
         inflater?.inflate(R.menu.winner_menu, menu)
+        // check if activity resolves
+        if (null == getShareIntent().resolveActivity(requireActivity().packageManager)){
+            menu?.findItem(R.id.share)?.setVisible(false)
+        }
     }
 
     // create our share intent
     private fun getShareIntent(): Intent {
         val args = GameWonFragmentArgs.fromBundle(requireArguments())
-        // Create an implicit intent
-        // ACTION_SEND - We want activities that are registered with an intent filter
-        // to handle the SEND action which is useful for SHARING
-        val shareIntent = Intent(Intent.ACTION_SEND)
-        // Set type of data we're going to share
-        shareIntent.setType("text/plain")
-        // Add intent extras
-                .putExtra(Intent.EXTRA_TEXT, getString(R.string.share_success_text, args.numCorrect, args.numQuestions))
-        return shareIntent
+//        // Create an implicit intent
+//        // ACTION_SEND - We want activities that are registered with an intent filter
+//        // to handle the SEND action which is useful for SHARING
+//        val shareIntent = Intent(Intent.ACTION_SEND)
+//        // Set type of data we're going to share
+//        shareIntent.setType("text/plain")
+//        // Add intent extras
+//                .putExtra(Intent.EXTRA_TEXT, getString(R.string.share_success_text, args.numCorrect, args.numQuestions))
+//        return shareIntent
+
+        return ShareCompat.IntentBuilder.from(requireActivity())
+                .setText(getString(R.string.share_success_text, args.numCorrect, args.numQuestions))
+                .setType("text/plain")
+                .intent
     }
     private fun shareSuccess(){
         startActivity(getShareIntent())
