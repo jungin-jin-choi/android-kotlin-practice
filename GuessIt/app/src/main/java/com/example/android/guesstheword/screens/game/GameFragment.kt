@@ -51,10 +51,9 @@ class GameFragment : Fragment() {
         )
 
 
-        Log.i("GameFragment", "Called ViewModelProviders.of")
+        Log.i("GameFragment", "Called ViewModelProvider")
         // Request the view model from ViewModelProvider
         viewModel = ViewModelProvider(this).get(GameViewModel::class.java)
-        Log.i("GameFragment", "Get GameViewModel")
         binding.correctButton.setOnClickListener {
             viewModel.onCorrect()
         }
