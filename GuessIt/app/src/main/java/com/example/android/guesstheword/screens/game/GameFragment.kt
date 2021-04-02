@@ -62,15 +62,17 @@ class GameFragment : Fragment() {
          * Can do the same for correctButton
          * **/
         binding.gameViewModel = viewModel
+        // Allows LiveData to automatically update the data binding layouts
+        binding.lifecycleOwner = this
 
-        /** Setting up LiveData observation relationship **/
-        // compile error when `this` not `viewLifecycleOwner`
-        viewModel.score.observe(viewLifecycleOwner, Observer { newScore ->
-            binding.scoreText.text = newScore.toString()
-        })
-        viewModel.word.observe(viewLifecycleOwner, Observer{ newWord ->
-            binding.wordText.text = newWord
-        })
+        /** LiveData automatically update the layout via data binding
+         * which allows to remove boilerplate codes setting up observation relationship, as shown below
+         * viewModel.score.observe(viewLifecycleOwner, Observer { newScore ->
+         *       binding.scoreText.text = newScore.toString()
+         * })
+         *
+         * **/
+
         viewModel.eventGameFinish.observe(viewLifecycleOwner, Observer{ isFinished ->
             if(isFinished){
                 gameFinished()
