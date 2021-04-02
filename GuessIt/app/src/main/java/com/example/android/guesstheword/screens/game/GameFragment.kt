@@ -54,13 +54,14 @@ class GameFragment : Fragment() {
         Log.i("GameFragment", "Called ViewModelProvider")
         // Request the view model from ViewModelProvider
         viewModel = ViewModelProvider(this).get(GameViewModel::class.java)
-        binding.correctButton.setOnClickListener {
-            viewModel.onCorrect()
-        }
-        binding.skipButton.setOnClickListener {
-            viewModel.onSkip()
-        }
-        Log.i("GameFragment", "Set onClickListeners")
+        /** Let binding know about my viewModel to get rid of boilerplate codes such as
+         *         binding.skipButton.setOnClickListener {
+         *               viewModel.onSkip()
+         *         }
+         * Above code can be replaced by onClick attribute inside skipButton in xml file.
+         * Can do the same for correctButton
+         * **/
+        binding.gameViewModel = viewModel
 
         /** Setting up LiveData observation relationship **/
         // compile error when `this` not `viewLifecycleOwner`
