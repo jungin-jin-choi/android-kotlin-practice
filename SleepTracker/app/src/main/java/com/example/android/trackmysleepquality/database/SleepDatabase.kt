@@ -15,3 +15,44 @@
  */
 
 package com.example.android.trackmysleepquality.database
+
+import android.content.Context
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+
+@Database(entities = [SleepNight::class], version = 1,  exportSchema = false)
+abstract class SleepDatabase : RoomDatabase(){
+    abstract val sleepDatabaseDao: SleepDatabaseDao
+    // Companion object allows clients to access the methods
+    // for creating or getting the database without instantiating the class
+    companion object{
+        /**
+         * @Volatile ensures the property to be always up-to-date & same to all exec threads
+         * Value of a volatile var will never be cached : All R/W are done in main memory
+         * Changes made by one thread are visible to all other threads immediately
+         **/
+        @Volatile
+        // INSTANCE will keep a reference to the database once we have one
+        private var INSTANCE: SleepDatabase? = null
+
+        fun getInstance(context: Context): SleepDatabase{
+            synchronized(this){
+                var instance = INSTANCE
+                if(instance == null){
+                    // Use database builder to get a database
+                    instance = Room.databaseBuilder(
+                            context.applicationContext,
+                            SleepDatabase::class.java,
+                            "sleep_history_database"
+                    )
+                            // Add the required migration strategy to the builder
+                            .fallbackToDestructiveMigration()
+                            .build()
+                    INSTANCE = instance
+                }
+                return instance
+            }
+        }
+    }
+}

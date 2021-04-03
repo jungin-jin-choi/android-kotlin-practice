@@ -22,21 +22,21 @@ import androidx.room.*
 @Dao
 interface SleepDatabaseDao{
     @Insert
-    fun insert(night: SleepNight)
+    suspend fun insert(night: SleepNight)
 
     @Update
-    fun update(night: SleepNight)
+    suspend fun update(night: SleepNight)
 
     // `:` reference the function parameter(key)
     @Query("SELECT * from daily_sleep_quality_table WHERE nightId = :key")
-    fun get(key: Long): SleepNight
+    suspend fun get(key: Long): SleepNight
 
 //    @Delete
 //    fun delete(night: SleepNight)
 //    fun deleteAllNights(nights: List<SleepNight>): Int
 
     @Query("DELETE FROM daily_sleep_quality_table")
-    fun clear()
+    suspend fun clear()
 
     @Query("SELECT * FROM daily_sleep_quality_table ORDER BY nightId DESC")
     // Room makes sure that LiveData is updated whenever the database is updated
@@ -44,5 +44,5 @@ interface SleepDatabaseDao{
 
     @Query("SELECT * FROM daily_sleep_quality_table ORDER BY nightId DESC LIMIT 1")
     // Return type is nullable because
-    fun getTonight(): SleepNight?
+    suspend fun getTonight(): SleepNight?
 }
