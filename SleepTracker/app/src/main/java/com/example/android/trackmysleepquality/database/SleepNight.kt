@@ -20,19 +20,17 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-// To let room to use this class to create a table, annotate @Entity
 @Entity(tableName = "daily_sleep_quality_table")
 data class SleepNight(
-        // Let room to autogenerate the key
         @PrimaryKey(autoGenerate = true)
         var nightId: Long = 0L,
 
         @ColumnInfo(name = "start_time_milli")
-        var startTimeMilli: Long = System.currentTimeMillis(),
+        val startTimeMilli: Long = System.currentTimeMillis(),
 
         @ColumnInfo(name = "end_time_milli")
         var endTimeMilli: Long = startTimeMilli,
 
-        @ColumnInfo(name="quality_rating")
+        @ColumnInfo(name = "quality_rating")
         var sleepQuality: Int = -1
 )
