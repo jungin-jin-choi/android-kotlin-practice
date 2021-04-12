@@ -17,3 +17,30 @@
 
 package com.example.android.marsrealestate
 
+import android.widget.ImageView
+import androidx.core.net.toUri
+import androidx.databinding.BindingAdapter
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+
+// Create a binding adapter that converts the img URL to a URI with https scheme
+/**
+ * @BindingAdapter tells DataBinding that we want this BindingAdapter executed
+ * when an XML item has `imageUrl` attribute
+ *
+ * - Image URL should be converted to URI
+ * - Resulting URI should have the HTTP scheme (cuz server requires HTTPS)
+ */
+
+@BindingAdapter("imageUrl")
+fun bindImage(imgView: ImageView, imgUrl: String?){
+    imgUrl?.let {
+        val imgUri = imgUrl.toUri().buildUpon().scheme("https").build()
+        Glide.with(imgView.context)
+                .load(imgUri)
+                .apply(RequestOptions()
+                        .placeholder(R.drawable.loading_animation)
+                        .error(R.drawable.ic_broken_image))
+                .into(imgView)
+    }
+}
