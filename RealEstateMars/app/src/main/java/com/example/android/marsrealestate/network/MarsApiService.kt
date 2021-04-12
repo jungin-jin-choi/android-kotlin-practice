@@ -17,8 +17,10 @@
 
 package com.example.android.marsrealestate.network
 
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import kotlinx.coroutines.Deferred
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -52,11 +54,13 @@ interface MarsApiService{
     /**
      * @GET specifies the endpoint for JSON Response (ex. realestate)
      * When getProperties() is called, Retrofit appends to the endpoint to the base URL
-     * and creates a Retrofit Call object, which will start the HTTP request
+     * and creates a Deferred object, which creates and starts the HTTP network request
+     * (By calling it in a coroutine scope, the network request will be started in a background thread)
      * */
     @GET("realestate")
-    fun getProperties():
-            Call<List<MarsProperty>>
+    suspend fun getProperties():
+            // Deferred - coroutine job that can directly return a result
+            List<MarsProperty>
 }
 
 /**
