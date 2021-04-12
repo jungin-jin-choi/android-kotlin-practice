@@ -17,4 +17,61 @@
 
 package com.example.android.marsrealestate.network
 
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import retrofit2.Call
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
+import retrofit2.http.GET
+
 private const val BASE_URL = "https://mars.udacity.com/"
+
+/**
+ * Create Moshi object
+ * */
+private val moshi = Moshi.Builder()
+        .add(KotlinJsonAdapterFactory())
+        .build()
+
+/**
+ *  Create Retrofit object
+ *  1) Add converter factory
+ *  2) Add base URL
+ * */
+private val retrofit = Retrofit.Builder()
+        .addConverterFactory(MoshiConverterFactory.create(moshi))
+        .baseUrl(BASE_URL)
+        .build()
+
+/**
+ * Service API, implement as an interface
+ * Define method to request JSON response string
+ * */
+interface MarsApiService{
+    /**
+     * @GET specifies the endpoint for JSON Response (ex. realestate)
+     * When getProperties() is called, Retrofit appends to the endpoint to the base URL
+     * and creates a Retrofit Call object, which will start the HTTP request
+     * */
+    @GET("realestate")
+    fun getProperties():
+            Call<List<MarsProperty>>
+}
+
+/**
+ * Create a Retrofit Service to expose it to the rest of the app
+ * (Above interface is "interface", creation is done here by passing in the Service API interface)
+ *
+ *  retrofit.create() calls are expensive!
+ *  Should declare as `object` since our app needs only one retrofit service instance.
+ * */
+object MarsAPI{
+    /**
+     * Lazy initialization! (Created the first time it is actually used)
+     * Calling MarsAPI.retrofitService will return a retrofit object that implements MarsApiService
+     * */
+    val retrofitService: MarsApiService by lazy{
+        retrofit.create(MarsApiService::class.java)
+    }
+}
