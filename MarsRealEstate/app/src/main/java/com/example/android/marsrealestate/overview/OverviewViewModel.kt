@@ -39,7 +39,6 @@ class OverviewViewModel : ViewModel() {
     val status: LiveData<String>
         get() = _status
 
-    // TODO (02) Update the ViewModel to return a LiveData of List<MarsProperty>
     // Internally, we use a MutableLiveData, because we will be updating the MarsProperty with
     // new values
     private val _properties = MutableLiveData<List<MarsProperty>>()
