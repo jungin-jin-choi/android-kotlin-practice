@@ -16,3 +16,33 @@
  */
 
 package com.example.android.devbyteviewer.repository
+
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
+import com.example.android.devbyteviewer.database.VideosDatabase
+import com.example.android.devbyteviewer.database.asDomainModel
+import com.example.android.devbyteviewer.domain.Video
+import com.example.android.devbyteviewer.network.Network
+import com.example.android.devbyteviewer.network.asDatabaseModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+
+class VideosRepository(private val database: VideosDatabase){
+    val videos: LiveData<List<Video>> = Transformations.map(database.videoDao.getVideos()){
+        it.asDomainModel()
+    }
+
+    // suspend keyword ---> function will be called from a coroutine
+    suspend fun refreshVideos(){
+        // withContext(Dispatchers.IO) --> force the Kotlin coroutine to switch to the IO dispatcher
+        withContext(Dispatchers.IO){
+            // getPlaylist() --> function for making a network call
+            // await() ---> coroutine will suspend until the data is available
+            val playlist = Network.devbytes.getPlaylist().await()
+            // insert through Dao interface
+            // `*` asterisk allows to pass in array to a function that expects varargs
+            database.videoDao.insertAll(*playlist.asDatabaseModel())
+        }
+
+    }
+}
